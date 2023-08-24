@@ -1,0 +1,46 @@
+import fs from "fs";
+import path from "path";
+//  npmjs.com에서 gray-matter 검색 후 설치
+//  gray-matter: markdown 파일의 메타데이터를 파싱하는 라이브러리
+import matter from "gray-matter";
+
+const postsDirectory = path.join(process.cwd(), "posts");
+console.log("process.cwd(): ", process.cwd());
+console.log("postsDirectory: ", postsDirectory);
+
+export function getSortedPostsData() {
+  // Get file names under /posts
+  //    /posts 디렉토리에 있는 파일 이름을 가져옴
+  const fileNames = fs.readdirSync(postsDirectory);
+  console.log("fileNames: ", fileNames);
+  //   ["pre-rendering.md", "ssg-ssr.md"]
+
+  const allPostsData = fileNames.map((fileName) => {
+    //  Remove ".md" from file name to get id
+    const id = fileName.replace(/\.md$/, "");
+
+    // Read markdown file as string
+    const fullPath = path.join(postsDirectory, fileName);
+    const fileContents = fs.readFileSync(fullPath, "utf-8");
+
+    // Use gray-matter to parse the post metadata section
+    const matterResult = matter(fileContents);
+
+    //  Combine the data with the id
+    return {
+      id,
+      ...(matterResult.data as { date: string; title: string }),
+      //   ...allPostsData(matterResult.data as { date: string; title: string }),
+    };
+  });
+
+  //  Sort posts by date
+  return allPostsData.sort((a, b) => {
+    if (a.date < b.date) {
+      //  작성일이 최신인 데이터를 앞쪽으로 정렬
+      return 1;
+    } else {
+      return -1;
+    }
+  });
+}
