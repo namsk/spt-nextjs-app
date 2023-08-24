@@ -3,6 +3,8 @@ import path from "path";
 //  npmjs.com에서 gray-matter 검색 후 설치
 //  gray-matter: markdown 파일의 메타데이터를 파싱하는 라이브러리
 import matter from "gray-matter";
+import { remark } from "remark";
+import html from "remark-html";
 
 const postsDirectory = path.join(process.cwd(), "posts");
 console.log("process.cwd(): ", process.cwd());
@@ -42,4 +44,38 @@ export function getSortedPostsData() {
       return -1;
     }
   });
+}
+
+export function getAllPostIds() {
+  const fileNames = fs.readdirSync(postsDirectory);
+  console.log("fileNames: ", fileNames);
+
+  return fileNames.map((fileName) => {
+    return {
+      params: {
+        id: fileName.replace(/\.md$/, ""),
+      },
+    };
+  });
+}
+
+export async function getPostData(id: string) {
+  const fullPath = path.join(postsDirectory, `${id}.md`);
+  const fileContents = fs.readFileSync(fullPath, "utf-8");
+
+  //  Use gray-matter to parse the post metadata section
+  const matterResult = matter(fileContents);
+
+  const processedContent = await remark()
+    .use(html)
+    .process(matterResult.content);
+  const contentHtml = processedContent.toString();
+
+  // console.log("contentHtml: ", contentHtml);
+  // console.log("matterResult.data: ", matterResult.data);
+  return {
+    id,
+    contentHtml,
+    ...(matterResult.data as { date: string; title: string }),
+  };
 }
