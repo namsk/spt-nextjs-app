@@ -1,17 +1,24 @@
-import { Metadata } from 'next'
+import { GetStaticProps, Metadata } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import homeStyles from '../styles/Home.module.css'
-
-
+import homeStyles from '@/styles/Home.module.css'
+import { getSortedPostsData } from '@/lib/posts'
 
 export const metadata:Metadata = {
   title: 'Sean Nam',
   description: 'Home page',
 }
 
+// export default function Home({allPostsData}: {
+//   allPostsData: {
+//     date: string,
+//     title: string,
+//     id: string
+//   }[]
+// }) {
+  // console.log(allPostsData)
 export default function Home() {
-  console.log("page.tsx");
+  const allPostsData = getSortedPostsData();
   return (
     // <div className={styles.container}>
     <div>
@@ -24,9 +31,38 @@ export default function Home() {
       <section className={`${homeStyles.headingMd} ${homeStyles.padding1px}`}>
         <h2 className={homeStyles.headingLg}>Blog</h2>
         <ul className={homeStyles.list}>
-
+          {allPostsData.map(({ id, date, title }) => (
+              <li key={id} className={homeStyles.listItem}>
+                  {title}
+                <br />
+                <small className={homeStyles.lightText}>
+                  {date}
+                </small>
+              </li>
+            ))}
         </ul>
       </section>
     </div>
   )
 }
+
+/*
+Next.js 13 버전에서는 새로운 데이터 페칭 접근방식을 선호,
+  getServerSideProps, getStaticProps, getStaticPaths는 폐기되었음
+
+  참고:
+    - https://nextjs.org/docs/app/building-your-application/rendering/static-and-dynamic#static-data-fetching-default
+    - https://www.infoworld.com/article/3679489/the-best-new-features-in-nextjs-13.html
+    - https://stackoverflow.com/questions/76267351/how-to-fetch-data-server-side-in-the-latest-next-js-tried-getstaticprops-but-it/76766776#76766776
+*/
+/*
+export const getStaticProps:GetStaticProps = async () => {
+  console.log('getStaticProps');
+  const allPostsData = getSortedPostsData()
+  return {
+    props: {
+      allPostsData
+    }
+  }
+}
+*/
