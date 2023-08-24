@@ -10,18 +10,9 @@ export const metadata:Metadata = {
   description: 'Home page',
 }
 
-// export default function Home({allPostsData}: {
-//   allPostsData: {
-//     date: string,
-//     title: string,
-//     id: string
-//   }[]
-// }) {
-  // console.log(allPostsData)
 export default function Home() {
   const allPostsData = getSortedPostsData();
   return (
-    // <div className={styles.container}>
     <div>
       <section className={homeStyles.headingMd}>
         <p>[Sean Nam Introduction]</p>

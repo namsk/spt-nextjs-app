@@ -1,13 +1,7 @@
 import { getAllPostIds, getPostData } from '@/lib/posts'
-import { GetStaticPaths, GetStaticProps } from 'next'
+import { GetStaticPaths, GetStaticProps, ResolvingMetadata } from 'next'
 import React from 'react'
 
-// const [id] = () => {
-// const Post = ({ postData }: {postData: {
-//   title: string,
-//   date: string,
-//   contentHtml: string
-// }}) => {
 const Post = async ({params}: {
   params: {
     id: string
