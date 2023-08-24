@@ -3,6 +3,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import homeStyles from '@/styles/Home.module.css'
 import { getSortedPostsData } from '@/lib/posts'
+import Link from 'next/link'
 
 export const metadata:Metadata = {
   title: 'Sean Nam',
@@ -33,7 +34,9 @@ export default function Home() {
         <ul className={homeStyles.list}>
           {allPostsData.map(({ id, date, title }) => (
               <li key={id} className={homeStyles.listItem}>
+                <Link href={`/posts/${id}`}>
                   {title}
+                </Link>
                 <br />
                 <small className={homeStyles.lightText}>
                   {date}
