@@ -1,7 +1,7 @@
 import { getAllPostIds, getPostData } from '@/lib/posts'
 import { GetStaticPaths, GetStaticProps, ResolvingMetadata } from 'next'
 import React from 'react'
-
+import postStyle from '@/styles/Post.module.css'
 const Post = async ({params}: {
   params: {
     id: string
@@ -10,7 +10,7 @@ const Post = async ({params}: {
   const postData = await getPostData(params.id);
   
   return (
-    <div>
+    <div className={postStyle.container}>
       <article>
         <h1>{postData.title}</h1>
         <div>

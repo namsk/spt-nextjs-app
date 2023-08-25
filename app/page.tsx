@@ -13,7 +13,7 @@ export const metadata:Metadata = {
 export default function Home() {
   const allPostsData = getSortedPostsData();
   return (
-    <div>
+    <div className={homeStyles.container}>
       <section className={homeStyles.headingMd}>
         <p>[Sean Nam Introduction]</p>
         <p>
